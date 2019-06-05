@@ -368,8 +368,9 @@ uint8_t led_animation_orientation = 0;
 uint8_t led_animation_direction = 0;
 uint8_t led_animation_breathing = 0;
 uint8_t led_animation_id = 0;
+uint8_t led_instruction_id = 0;
 float led_animation_speed = 4.0f;
-uint8_t led_lighting_mode = LED_MODE_NORMAL;
+uint8_t led_lighting_mode = LED_MODE_KEYS_ONLY;
 uint8_t led_enabled = 1;
 uint8_t led_animation_breathe_cur = BREATHE_MIN_STEP;
 uint8_t breathe_dir = 1;
@@ -429,6 +430,11 @@ static void led_run_pattern(led_setup_t *f, float* ro, float* go, float* bo, flo
     }
 }
 
+void set_led_animation_id(uint8_t id)
+{
+    led_animation_id = id;
+}
+
 static void led_matrix_massdrop_config_override(int i)
 {
     float ro = 0;
@@ -448,7 +454,8 @@ static void led_matrix_massdrop_config_override(int i)
     } else if (led_lighting_mode == LED_MODE_INDICATORS_ONLY) {
         //Do not act on this LED (Only show indicators)
     } else {
-        led_instruction_t* led_cur_instruction = led_instructions;
+        // led_instruction_t* led_cur_instruction = led_instructions;
+        led_instruction_t* led_cur_instruction = led_instruction_list[led_instruction_id];
         while (!led_cur_instruction->end) {
             // Check if this applies to current layer
             if ((led_cur_instruction->flags & LED_FLAG_MATCH_LAYER) &&

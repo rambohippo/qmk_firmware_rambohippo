@@ -140,12 +140,22 @@ extern led_instruction_t led_instructions[];
 
 extern uint8_t led_animation_breathing;
 extern uint8_t led_animation_id;
+extern uint8_t led_instruction_id;
 extern float led_animation_speed;
 extern uint8_t led_lighting_mode;
 extern uint8_t led_enabled;
 extern uint8_t led_animation_breathe_cur;
 extern uint8_t led_animation_direction;
 extern uint8_t breathe_dir;
+extern const uint8_t led_setups_count;
+extern const uint8_t led_instruction_count;
+
+extern uint8_t led_default_rotate_pattern[];
+
+extern void *led_setups[];
+extern void *led_instruction_list[];
+
+void set_led_animation_id(uint8_t);
 
 #define LED_MODE_NORMAL             0   //Must be 0
 #define LED_MODE_KEYS_ONLY          1
