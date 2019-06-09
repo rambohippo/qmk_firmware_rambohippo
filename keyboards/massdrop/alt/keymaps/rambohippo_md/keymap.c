@@ -36,6 +36,12 @@ enum alt_keycodes {
 #define SPACE_MOD LT(_NAV, KC_SPC)
 #define DESK_PREV LCTL(LALT(KC_LEFT))
 #define DESK_NEXT LCTL(LALT(KC_RIGHT))
+#define ATAB_PREV LSFT(LALT(KC_TAB))
+#define ATAB_NEXT LALT(KC_TAB)
+#define CTAB_PREV LSFT(LCTL(KC_TAB))
+#define CTAB_NEXT LCTL(KC_TAB)
+#define KC_TILD LSFT(KC_GRV)
+
 
 keymap_config_t keymap_config;
 
@@ -49,15 +55,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_MODS] = LAYOUT(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_MUTE, \
-        L_T_BR,  L_PSD,   L_BRI,   L_PSI,   KC_MPRV, KC_MNXT, _______, _______, U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_END, \
+        L_T_BR,  L_PSD,   L_BRI,   L_PSI,   _______, KC_TILD, _______, _______, U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_END, \
         L_T_PTD, L_I_P,   L_BRD,   L_I_N,   _______, _______, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
         L_T_UND, L_T_MD,  L_T_ONF, L_PTP, L_PTN, MD_BOOT, TG_NKRO, _______, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
         _______, _______, _______,                            KC_MPLY,                            _______, _______, KC_HOME, KC_PGDN, KC_END  \
     ),
     [_NAV] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          _______, _______, \
+        _______, _______, _______, CTAB_PREV, CTAB_NEXT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, ATAB_PREV, ATAB_NEXT, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_END, _______, _______,          _______, _______, \
         _______, _______, _______,                            _______,                            DESK_PREV, DESK_NEXT, _______, _______, _______  \
     ),
@@ -71,6 +77,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     */
 };
+
+// KC_MPRV and KC_MNXT were defined in _MODS layer as R and T. Removed.
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
@@ -333,7 +341,7 @@ void *led_instruction_list[] = {
 const uint8_t led_instruction_count = sizeof(led_instruction_list) / sizeof(led_instruction_list[0]);
 
 uint8_t led_default_rotate_pattern[4] = {
-    0, 0, 0, 0
+    0, 0, 1, 0
 };
 
 void rgb_matrix_init_user(void) {
