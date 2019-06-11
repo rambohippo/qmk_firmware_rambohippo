@@ -24,6 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef USE_MASSDROP_CONFIGURATOR
 __attribute__((weak))
 led_instruction_t led_instructions[] = { { .end = 1 } };
+__attribute__((weak))
+void *led_instruction_list[] = {led_instructions};
+__attribute__((weak))
+void *led_game_instruction_list[] = {led_instructions};
 static void led_matrix_massdrop_config_override(int i);
 #endif // USE_MASSDROP_CONFIGURATOR
 
@@ -369,6 +373,7 @@ uint8_t led_animation_direction = 0;
 uint8_t led_animation_breathing = 0;
 uint8_t led_animation_id = 0;
 uint8_t led_instruction_id = 0;
+uint8_t led_game_colors = 0;
 float led_animation_speed = 4.0f;
 uint8_t led_lighting_mode = LED_MODE_KEYS_ONLY;
 uint8_t led_enabled = 1;
@@ -455,7 +460,16 @@ static void led_matrix_massdrop_config_override(int i)
         //Do not act on this LED (Only show indicators)
     } else {
         // led_instruction_t* led_cur_instruction = led_instructions;
-        led_instruction_t* led_cur_instruction = led_instruction_list[led_instruction_id];
+        // led_instruction_t* led_cur_instruction = led_instruction_list[led_instruction_id];
+        led_instruction_t* led_cur_instruction;
+        if (led_game_colors)
+        {
+            led_cur_instruction = led_game_instruction_list[led_instruction_id];
+        }
+        else
+        {
+            led_cur_instruction = led_instruction_list[led_instruction_id];
+        }
         while (!led_cur_instruction->end) {
             // Check if this applies to current layer
             if ((led_cur_instruction->flags & LED_FLAG_MATCH_LAYER) &&

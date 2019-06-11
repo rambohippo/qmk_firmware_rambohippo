@@ -23,17 +23,21 @@ enum alt_keycodes {
     L_I_P,              //LED instruction preset previous
     L_SC_N,             //LED Pattern scroll next
     L_SC_P,             //LED pattern scroll previous
-    L_T_UND             //LED Toggle Underglow
+    L_T_UND,            //LED Toggle Underglow
+    L_T_GCM             //LED Toggle Game Color Mode
 };
 
 // Layers
 #define _BASE 0
-#define _MODS 1
-#define _NAV 2
+#define _GAME 1
+#define _MODS 2
+#define _NAV 3
+#define _NUMS 4
 
 #define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
 #define CAPS_TAP LCTL_T(KC_CAPS)
 #define SPACE_MOD LT(_NAV, KC_SPC)
+#define ESC_MOD LT(_NUMS, KC_ESC)
 #define DESK_PREV LCTL(LALT(KC_LEFT))
 #define DESK_NEXT LCTL(LALT(KC_RIGHT))
 #define ATAB_PREV LSFT(LALT(KC_TAB))
@@ -41,22 +45,30 @@ enum alt_keycodes {
 #define CTAB_PREV LSFT(LCTL(KC_TAB))
 #define CTAB_NEXT LCTL(KC_TAB)
 #define KC_TILD LSFT(KC_GRV)
+#define L_T_GCM TG(_GAME)
 
 
 keymap_config_t keymap_config;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
+        ESC_MOD,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_HOME, \
         CAPS_TAP, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGUP, \
         KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC,          KC_UP,   KC_PGDN, \
-        KC_LCTL, KC_LGUI, KC_LALT,                            SPACE_MOD,                             KC_RALT, MO(1),   KC_LEFT, KC_DOWN, KC_RGHT  \
+        KC_LCTL, KC_LGUI, KC_LALT,                            SPACE_MOD,                             KC_RALT, MO(_MODS),   KC_LEFT, KC_DOWN, KC_RGHT  \
+    ),
+    [_GAME] = LAYOUT(
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_HOME, \
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGUP, \
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,          KC_UP,   KC_PGDN, \
+        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_MODS),   KC_LEFT, KC_DOWN, KC_RGHT  \
     ),
     [_MODS] = LAYOUT(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_MUTE, \
         L_T_BR,  L_PSD,   L_BRI,   L_PSI,   _______, KC_TILD, _______, _______, U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_END, \
-        L_T_PTD, L_I_P,   L_BRD,   L_I_N,   _______, _______, _______, _______, _______, _______, _______, _______,          _______, KC_VOLU, \
+        L_T_PTD, L_I_P,   L_BRD,   L_I_N,   _______, _______, _______, _______, _______, _______, _______, _______,          L_T_GCM, KC_VOLU, \
         L_T_UND, L_T_MD,  L_T_ONF, L_PTP, L_PTN, MD_BOOT, TG_NKRO, _______, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
         _______, _______, _______,                            KC_MPLY,                            _______, _______, KC_HOME, KC_PGDN, KC_END  \
     ),
@@ -66,6 +78,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, ATAB_PREV, ATAB_NEXT, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          _______, _______, \
         _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_END, _______, _______,          _______, _______, \
         _______, _______, _______,                            _______,                            DESK_PREV, DESK_NEXT, _______, _______, _______  \
+    ),
+    [_NUMS] = LAYOUT(
+        _______, _______, _______, _______, _______, _______, _______, _______, KC_PSLS, KC_PAST, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, KC_7, KC_8, KC_9, KC_PMNS, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, KC_PPLS, _______,          KC_ENT, _______, \
+        _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, _______, _______,          _______, _______, \
+        _______, _______, _______,                            KC_0,                            KC_PDOT, KC_ENT, _______, _______, _______  \
     ),
     /*
     [X] = LAYOUT(
@@ -240,6 +259,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
             }
             return false;
+        case L_T_GCM:
+            if (record->event.pressed) {
+                led_game_colors = !led_game_colors;
+            }
+            return true;
         /*
         case L_SC_N:
             if (record->event.pressed) {
@@ -308,26 +332,34 @@ led_instruction_t led_instructions[] = {
 */
 
 led_instruction_t led_instructions_white_and_teal[] = {
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2684297214, .id1 = 545252351, .id2 = 4261416832, .id3 = 7, .r = 255, .g = 255, .b = 255}, // white
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 1610670081, .id1 = 3749714944, .id2 = 33550463, .id3 = 504, .r = 24, .g = 215, .b = 204}, // teal
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2684297214, .id1 = 545252351, .id2 = 4261416832, .id3 = 7, .r = 255, .g = 255, .b = 255 }, // white
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 1610670081, .id1 = 3749714944, .id2 = 33550463, .id3 = 504, .r = 24, .g = 215, .b = 204 }, // teal
     { .end = 1 }
 };
 
-
 led_instruction_t led_instructions_miami[] = {
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2684297214, .id1 = 545252351, .id2 = 4261416832, .id3 = 7, .r = 46, .g = 255, .b = 255}, // blue
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 1610670081, .id1 = 3749714944, .id2 = 33550463, .id3 = 504, .r = 254, .g = 109, .b = 188}, // pink
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2684297214, .id1 = 545252351, .id2 = 4261416832, .id3 = 7, .r = 46, .g = 255, .b = 255 }, // blue
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 1610670081, .id1 = 3749714944, .id2 = 33550463, .id3 = 504, .r = 254, .g = 109, .b = 188 }, // pink
     { .end = 1 }
 };
 
 led_instruction_t led_instructions_white_and_pattern_mods[] = {
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2684297214, .id1 = 545252351, .r = 255, .g = 255, .b = 255}, // white
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_ROTATE_PATTERN, .layer = 0, .id0 = 1610670081, .id1 = 3749714944, .id2 = 4294967295, .id3 = 511}, // pattern
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2684297214, .id1 = 545252351, .r = 255, .g = 255, .b = 255 }, // white
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_ROTATE_PATTERN, .id0 = 1610670081, .id1 = 3749714944, .id2 = 4294967295, .id3 = 511 }, // pattern
     { .end = 1 }
 };
 
 led_instruction_t led_instructions_rainbow[] = {
-    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_ROTATE_PATTERN, .id0 = 4294967295, .id1 = 4294967295, .id2 = 4294967295, .id3 = 511},
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_ROTATE_PATTERN, .id0 = 4294967295, .id1 = 4294967295, .id2 = 4294967295, .id3 = 511 },
+    { .end = 1 }
+};
+
+led_instruction_t led_game_instructions[] = {
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2147614721, .id1 = 16777219, .id2 = 7, .r = 255, .g = 0, .b = 0 }, // Red wasd, arrow keys, and esc
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 2147352448, .id1 = 2063593468, .r = 255, .g = 255, .b = 255 }, // White everything else
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id0 = 126, .id1 = 67112960, .r = 24, .g = 215, .b = 204 }, // Teal numbers and some modifiers
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_RGB, .id1 = 2147483648, .r = 0, .g = 0, .b = 255 }, // Teal Fn key
+    { .flags = LED_FLAG_MATCH_ID | LED_FLAG_USE_ROTATE_PATTERN, .id2 = 4294967288, .id3 = 511 }, // Pattern on underglow
     { .end = 1 }
 };
 
@@ -336,6 +368,13 @@ void *led_instruction_list[] = {
     led_instructions_miami,
     led_instructions_white_and_pattern_mods,
     led_instructions_rainbow
+};
+
+void *led_game_instruction_list[] = {
+    led_game_instructions,
+    led_game_instructions,
+    led_game_instructions,
+    led_game_instructions
 };
 
 const uint8_t led_instruction_count = sizeof(led_instruction_list) / sizeof(led_instruction_list[0]);

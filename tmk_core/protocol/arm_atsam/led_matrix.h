@@ -149,11 +149,13 @@ extern uint8_t led_animation_direction;
 extern uint8_t breathe_dir;
 extern const uint8_t led_setups_count;
 extern const uint8_t led_instruction_count;
+extern uint8_t led_game_colors;
 
 extern uint8_t led_default_rotate_pattern[];
 
 extern void *led_setups[];
 extern void *led_instruction_list[];
+extern void *led_game_instruction_list[];
 
 void set_led_animation_id(uint8_t);
 
