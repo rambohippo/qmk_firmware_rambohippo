@@ -24,67 +24,80 @@ enum alt_keycodes {
     L_SC_N,             //LED Pattern scroll next
     L_SC_P,             //LED pattern scroll previous
     L_T_UND,            //LED Toggle Underglow
-    L_T_GCM             //LED Toggle Game Color Mode
+    L_T_GCM             //LED Toggle Game Color Mode and Layer
 };
 
 // Layers
-#define _BASE 0
-#define _GAME 1
-#define _MODS 2
-#define _NAV 3
-#define _NUMS 4
+enum alt_layers {
+    _BASE,
+    _GAME,
+    _MODS,
+    _NAV,
+    _NUMS,
+    _SYMB
+};
 
-#define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
-#define CAPS_TAP LCTL_T(KC_CAPS)
-#define SPACE_MOD LT(_NAV, KC_SPC)
-#define ESC_MOD LT(_NUMS, KC_ESC)
-#define DESK_PREV LCTL(LALT(KC_LEFT))
-#define DESK_NEXT LCTL(LALT(KC_RIGHT))
-#define ATAB_PREV LSFT(LALT(KC_TAB))
-#define ATAB_NEXT LALT(KC_TAB)
-#define CTAB_PREV LSFT(LCTL(KC_TAB))
-#define CTAB_NEXT LCTL(KC_TAB)
-#define KC_TILD LSFT(KC_GRV)
-#define L_T_GCM TG(_GAME)
+#define TG_NKRO MAGIC_TOGGLE_NKRO       //Toggle 6KRO / NKRO mode
+#define FN MO(_MODS)
+#define SYMB MO(_SYMB)
 
+// #define CAPS_TAP LCTL_T(KC_CAPS)
+#define CAPS_MOD LT(_NUMS, KC_CAPS)     // Hold for _NUMS layer, tap for Caps Lock
+// #define ESC_MOD LT(_NUMS, KC_ESC)
+#define ESC_TAP LCTL_T(KC_ESC)          // Hold for L-CTRL, tap for esc
+#define SPACE_MOD LT(_NAV, KC_SPC)      // Hold for _NAV layer, tap for Space
+
+#define DESK_BK LCTL(LALT(KC_LEFT))     // Linux - Previous desktop
+#define DESK_FW LCTL(LALT(KC_RIGHT))    // Linux - Next desktop
+#define ATAB_BK LSFT(LALT(KC_TAB))
+#define ATAB_FW LALT(KC_TAB)
+#define CTAB_BK LSFT(LCTL(KC_TAB))
+#define CTAB_FW LCTL(KC_TAB)
 
 keymap_config_t keymap_config;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        ESC_MOD,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
+        CAPS_MOD,KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_HOME, \
-        CAPS_TAP, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGUP, \
+        ESC_TAP, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGUP, \
         KC_LSPO, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSPC,          KC_UP,   KC_PGDN, \
-        KC_LCTL, KC_LGUI, KC_LALT,                            SPACE_MOD,                             KC_RALT, MO(_MODS),   KC_LEFT, KC_DOWN, KC_RGHT  \
+        KC_LCTL, KC_LGUI, KC_LALT,                            SPACE_MOD,                          SYMB,    FN,      KC_LEFT, KC_DOWN, KC_RGHT  \
     ),
     [_GAME] = LAYOUT(
         KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
         KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_HOME, \
         KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_PGUP, \
         KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,          KC_UP,   KC_PGDN, \
-        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_MODS),   KC_LEFT, KC_DOWN, KC_RGHT  \
+        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, FN,      KC_LEFT, KC_DOWN, KC_RGHT  \
     ),
     [_MODS] = LAYOUT(
         KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_MUTE, \
         L_T_BR,  L_PSD,   L_BRI,   L_PSI,   _______, KC_TILD, _______, _______, U_T_AGCR,_______, KC_PSCR, KC_SLCK, KC_PAUS, _______, KC_END, \
         L_T_PTD, L_I_P,   L_BRD,   L_I_N,   _______, _______, _______, _______, _______, _______, _______, _______,          L_T_GCM, KC_VOLU, \
-        L_T_UND, L_T_MD,  L_T_ONF, L_PTP, L_PTN, MD_BOOT, TG_NKRO, _______, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
+        L_T_UND, L_T_MD,  L_T_ONF, L_PTP,   L_PTN,   MD_BOOT, TG_NKRO, _______, _______, _______, _______, _______,          KC_PGUP, KC_VOLD, \
         _______, _______, _______,                            KC_MPLY,                            _______, _______, KC_HOME, KC_PGDN, KC_END  \
     ),
     [_NAV] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, CTAB_PREV, CTAB_NEXT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, ATAB_PREV, ATAB_NEXT, _______, KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,          _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_END, _______, _______,          _______, _______, \
-        _______, _______, _______,                            _______,                            DESK_PREV, DESK_NEXT, _______, _______, _______  \
+        _______, _______, _______, CTAB_BK, CTAB_FW, _______, _______, _______, _______, _______, KC_PGUP, _______, _______, _______, _______, \
+        _______, _______, _______, ATAB_BK, ATAB_FW, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_PGDN, _______,          _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_END,  _______, _______,          _______, _______, \
+        _______, _______, _______,                            _______,                            DESK_BK, DESK_FW, _______, _______, _______  \
     ),
     [_NUMS] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, KC_PSLS, KC_PAST, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, KC_7, KC_8, KC_9, KC_PMNS, _______, _______, _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, KC_4, KC_5, KC_6, KC_PPLS, _______,          KC_ENT, _______, \
-        _______, _______, _______, _______, _______, _______, _______, KC_1, KC_2, KC_3, _______, _______,          _______, _______, \
-        _______, _______, _______,                            KC_0,                            KC_PDOT, KC_ENT, _______, _______, _______  \
+        _______, _______, _______, _______, _______, _______, _______, KC_7,    KC_8,    KC_9,    KC_PMNS, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, KC_4,    KC_5,    KC_6,    KC_PPLS, _______,          KC_ENT, _______, \
+        _______, _______, _______, _______, _______, _______, _______, KC_1,    KC_2,    KC_3,    _______, _______,          _______, _______, \
+        _______, _______, _______,                            KC_0,                               KC_PDOT, KC_ENT,  _______, _______, _______  \
+    ),
+    [_SYMB] = LAYOUT(
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______, KC_LCBR, KC_RCBR, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
     ),
     /*
     [X] = LAYOUT(
@@ -96,8 +109,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     */
 };
-
-// KC_MPRV and KC_MNXT were defined in _MODS layer as R and T. Removed.
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
@@ -261,6 +272,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case L_T_GCM:
             if (record->event.pressed) {
+                if (led_game_colors) {
+                    set_single_persistent_default_layer(_BASE);
+                } else {
+                    set_single_persistent_default_layer(_GAME);
+                }
                 led_game_colors = !led_game_colors;
             }
             return true;
