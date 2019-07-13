@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 
 extern keymap_config_t keymap_config;
+bool is_alt_tab_active = false;
 
 enum nyquist_layers {
     _QWERTY,
@@ -15,6 +16,7 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
+  ALT_TAB
 };
 
 // Keycode definitions
@@ -35,15 +37,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty
  * ,-----------------------------------------.  ,-----------------------------------------.
- * | Esc  |   1  |   2  |   3  |   4  |   5  |  |   6  |   7  |   8  |   9  |   0  | Bksp |
+ * | Esc  |   1  |   2  |   3  |   4  |   5  |  |   6  |   7  |   8  |   9  |   0  | Del  |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |  |   Y  |   U  |   I  |   O  |   P  | Del  |
+ * | Tab  |   Q  |   W  |   E  |   R  |   T  |  |   Y  |   U  |   I  |   O  |   P  | Bksp |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * | Ctrl |   A  |   S  |   D  |   F  |   G  |  |   H  |   J  |   K  |   L  |   ;  |  '   |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |  |   N  |   M  |   ,  |   .  |   /  | Shift|
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |Numpad| Ctrl | GUI  | Alt  | Lower| Space|  | Enter| Raise| Ctrl | Left |  Up  | Enter|
+ * | Gui  | Ctrl | Alt  |Numpad| Lower| Space|  | Enter| Raise| Ctrl | Left |  Up  | Enter|
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_QWERTY] = LAYOUT( \
@@ -51,28 +53,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
   KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
   KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT , \
-  NUMPAD,  KC_LCTL, KC_LGUI, KC_LALT, LOWER,   KC_SPC,  KC_ENT,  RAISE,   KC_RCTL, KC_LEFT, KC_RGHT,   KC_ENT \
+  KC_LGUI, KC_LCTL, KC_LALT, NUMPAD,  LOWER,   KC_SPC,  KC_ENT,  RAISE,   KC_RCTL, KC_LEFT, KC_RGHT,   KC_ENT \
 ),
 
 /* Lower
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |      |      |      |      |      |      |  |      |      |      |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      | S Tab|  Up  | Tab  |PageUp|      |  |      |      |      |      |      |      |
+ * |AltTab|      |  Up  |      |PageUp|      |  |      |      |      |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      | Left | Down | Right|PageDn|      |  | Left | Down |  Up  | Right|      |      |
+ * |      | Left | Down | Right|PageDn|AltTab|  | Left | Down |  Up  | Right|      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Shift|      |      |      |      |      |  |      |      | Home | End  |      |      |
+ * | Shift|      |      |      | Enter| Bksp |  |      |      | Home | End  |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      |      |      | ---- |      |  | Space|      |      |      |      |      |
+ * |  F5  |      |      |      | ---- |      |  | Space|      |      |      |      |      |
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_LOWER] =  LAYOUT( \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, S(KC_TAB), KC_UP, KC_TAB,  KC_PGUP, _______, _______, _______, _______, _______, _______, _______, \
-  _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
-  KC_LSFT, _______, _______, _______, _______, _______, _______, _______, KC_HOME, KC_END,  _______, _______, \
-  _______, _______, _______, _______, _______, _______, KC_SPC,  _______, _______, _______, _______, _______ \
+  ALT_TAB,  _______, KC_UP, _______,  KC_PGUP, _______, _______, _______, _______, _______, _______, _______, \
+  _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
+  KC_LSFT, _______, _______, _______, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______, \
+  KC_F5,   _______, _______, _______, _______, _______, KC_SPC,  _______, _______, _______, _______, _______ \
 ),
 
 /* RAISE
@@ -98,9 +100,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* NUMPAD - Arrows are not in a good location. Consider reworking left side
  * ,-----------------------------------------.  ,-----------------------------------------.
- * |      |      |      |      |      |      |  |      |      |   /  |   *  |   =  | Bksp |
+ * |      |      |      |      |      |      |  |      |      |   /  |   *  |   =  | Del  |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      | STab |  Up  |  Tab |      |      |  |      |   7  |   8  |   9  |   -  |  Del |
+ * |      | STab |  Up  |  Tab |      |      |  |      |   7  |   8  |   9  |   -  | Bksp |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      | Right| Down | Left |      |      |  |      |   4  |   5  |   6  |   +  |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
@@ -163,35 +165,50 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ADJUST:
-      if (record->event.pressed) {
-        layer_on(_ADJUST);
-      } else {
-        layer_off(_ADJUST);
-      }
-      return false;
-      break;
-  }
-  return true;
+    switch (keycode) {
+        case LOWER:
+            if (record->event.pressed) {
+                layer_on(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            } else {
+                layer_off(_LOWER);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+                if (is_alt_tab_active) {
+                    unregister_code(KC_LALT);
+                    is_alt_tab_active = false;
+                }
+            }
+            return false;
+            break;
+        case RAISE:
+            if (record->event.pressed) {
+                layer_on(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            } else {
+                layer_off(_RAISE);
+                update_tri_layer(_LOWER, _RAISE, _ADJUST);
+            }
+            return false;
+            break;
+        case ADJUST:
+            if (record->event.pressed) {
+                layer_on(_ADJUST);
+            } else {
+                layer_off(_ADJUST);
+            }
+            return false;
+            break;
+        case ALT_TAB:
+            if (record->event.pressed) {
+                if (!is_alt_tab_active) {
+                    is_alt_tab_active = true;
+                    register_code(KC_LALT);
+                }
+                register_code(KC_TAB);
+            } else {
+                unregister_code(KC_TAB);
+            }
+            break;
+    }
+    return true;
 }
