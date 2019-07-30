@@ -45,6 +45,7 @@ enum custom_keycodes {
 #define WN_DKCL LCTL(LGUI(KC_F4))       // Windows - Close Desktop
 #define CTAB_FW LCTL(KC_TAB)            // Ctrl-Tab
 #define CTAB_BK LSFT(LCTL(KC_TAB))      // Shift-Ctrl-Tab
+#define KC_TERM LGUI(KC_T)              // Super-T - Opens terminal
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -76,22 +77,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |AltTab|      |  Up  |      |PageUp|      |                    |      |      |      |      |      |      |
+ * |AltTab|      |  Up  |      |PageUp| Term |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      | Left | Down | Right|PageDn|AltTab|-------.    ,-------| Left | Down |  Up  | Right|      |      |
  * |------+------+------+------+------+------|  F5   |    |       |------+------+------+------+------+------|
  * |LShift|      |      |      | Enter| Bksp |-------|    |-------|      |      | Home | End  |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   |      |      | ---- | /       /       \Space \  | Raise|BackSP|      |
+ *                   |      | LAlt | ---- | /       /       \Space \  | Raise|BackSP|      |
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
 [_LOWER] = LAYOUT( \
     _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______, \
-    ALT_TAB, _______, KC_UP,   _______, KC_PGUP, _______,                   _______, _______, _______, _______, _______, _______, \
+    ALT_TAB, _______, KC_UP,   _______, KC_PGUP, KC_TERM,                   _______, _______, _______, _______, _______, _______, \
     _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, ALT_TAB,                   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______, \
     KC_LSFT, _______, _______, _______, KC_ENT,  KC_BSPC, KC_F5,   _______, _______, _______, KC_HOME, KC_END,  _______, _______,\
-                               _______, _______, _______, _______, KC_SPC,  RAISE,   KC_BSPC, _______ \
+                               _______, KC_LALT, _______, _______, KC_SPC,  RAISE,   KC_BSPC, _______ \
 ),
 
 /* RAISE - Symbols
