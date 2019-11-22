@@ -91,7 +91,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_RAISE] =  LAYOUT( \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_MUTE, \
-  _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD, KC_GRV,  KC_MINS, KC_BSLS, _______, _______, \
+  _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, _______, _______, KC_MINS, KC_BSLS, _______, _______, \
   KC_CAPS, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_ASTR, _______, KC_PLUS, KC_EQL,  KC_UNDS, _______, KC_VOLU, \
   KC_LSFT, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_AMPR, _______, KC_QUOT, KC_DQUO, KC_TILD, KC_GRV,  KC_VOLD, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
@@ -124,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      |      |      |      |      |      |  |      |      |      |      |      |  F12 |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      |      |SC Tab| C TAb|WinDNW|  | Mute | Vol -| Vol +| Play |      |      |
+ * |      |      |      |SC Tab| C Tab|WinDNW|  | Mute | Vol -| Vol +| Play |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * | Shift|LinPre|LinNxt|WinPre|WinNxt|WinDCL|  |      |      |      |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
