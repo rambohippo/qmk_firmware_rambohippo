@@ -26,7 +26,7 @@ enum custom_keycodes {
 
 // Keycode definitions
 #define NUMPAD MO(_NUMPAD)
-#define MOUSE  TO(_MOUSE)
+#define MOUSE  TG(_MOUSE)
 #define LN_DKFW LCTL(LALT(KC_RGHT))     // Linux - Next Desktop
 #define LN_DKBK LCTL(LALT(KC_LEFT))     // Linux - Previous Desktop
 #define WN_DKFW LCTL(LGUI(KC_RGHT))     // Windows - Next Desktop
@@ -161,7 +161,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_MOUSE] =  LAYOUT( \
-  _______, _______, _______, _______, _______, _______, _______, KC_ACL0, KC_ACL1, KC_ACL3, _______, _______, \
+  _______, _______, _______, _______, _______, _______, MOUSE,   KC_ACL0, KC_ACL1, KC_ACL2, _______, _______, \
   _______, _______, _______, _______, _______, _______, KC_WH_U, _______, KC_MS_U, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______, \
   _______, _______, _______, _______, _______, _______, KC_WH_L, KC_WH_R, _______, _______, _______, _______, \
