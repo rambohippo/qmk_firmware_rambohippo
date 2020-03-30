@@ -19,6 +19,7 @@
 
 extern keymap_config_t keymap_config;
 bool is_alt_tab_active = false;
+bool is_ctrl_tab_active = false;
 
 enum planck_layers {
     _QWERTY,
@@ -33,7 +34,9 @@ enum planck_keycodes {
     LOWER,
     RAISE,
     ADJUST,
-    ALT_TAB
+    ALT_TAB,
+    CTRLTAB,
+    EXDTVAL
 };
 
 #define NUMPAD MO(_NUMPAD)
@@ -48,6 +51,8 @@ enum planck_keycodes {
 #define CTAB_FW LCTL(KC_TAB)            // Ctrl-Tab
 #define CTAB_BK LSFT(LCTL(KC_TAB))      // Shift-Ctrl-Tab
 #define KC_TERM LGUI(KC_T)              // Super-T - Opens Terminal
+#define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
+#define FILES LGUI(KC_E)                // Gui-E - Opens file browser
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -75,16 +80,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |GuiTab|SC Tab| C Tab|PageUp|PageDn|AltTab| Left | Down |  Up  | Right|      | Del  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      | Term | Enter| Bksp |      | Home | End  |      |      |      |
+ * |Delete|ExDtVl|CtlTab| Term | Enter| Bksp |      | Home | End  |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |  F5  |      |      |      | ---- |      |      |      |      |      |      |      |
+ * |  F5  |Browse|      | Files| ---- |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_planck_grid(
     _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     GUI_TAB, CTAB_BK, CTAB_FW, KC_PGUP, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_DEL,
-    _______, _______, _______, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
-    KC_F5,   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    KC_DEL,  EXDTVAL, CTRLTAB, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
+    KC_F5,   BROWSER, _______, FILES,   _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
 /* Raise
@@ -207,6 +212,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     unregister_code(KC_LALT);
                     is_alt_tab_active = false;
                 }
+                if (is_ctrl_tab_active) {
+                    unregister_code(KC_LCTL);
+                    is_ctrl_tab_active = false;
+                }
             }
             return false;
             break;
@@ -229,6 +238,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 register_code(KC_TAB);
             } else {
                 unregister_code(KC_TAB);
+            }
+            break;
+        case CTRLTAB:
+            if (record->event.pressed) {
+                if (!is_ctrl_tab_active) {
+                    is_ctrl_tab_active = true;
+                    register_code(KC_LCTL);
+                }
+                register_code(KC_TAB);
+            } else {
+                unregister_code(KC_TAB);
+            }
+            break;
+        case EXDTVAL:
+            if (record->event.pressed) {
+                tap_code(KC_LALT);
+                tap_code(KC_A);
+                tap_code(KC_V);
+                tap_code(KC_V);
             }
             break;
     }
