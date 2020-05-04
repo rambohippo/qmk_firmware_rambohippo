@@ -80,7 +80,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |GuiTab|SC Tab| C Tab|PageUp|PageDn|AltTab| Left | Down |  Up  | Right|      | Del  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Delete|ExDtVl|CtlTab| Term | Enter| Bksp |      | Home | End  |      |      |      |
+ * |      |ExDtVl|CtlTab| Term | Enter| Bksp |      | Home | End  |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |  F5  |Browse|      | Files| ---- |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT_planck_grid(
     _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     GUI_TAB, CTAB_BK, CTAB_FW, KC_PGUP, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_DEL,
-    KC_DEL,  EXDTVAL, CTRLTAB, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
+    _______, EXDTVAL, CTRLTAB, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
     KC_F5,   BROWSER, _______, FILES,   _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
@@ -112,9 +112,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* NUMPAD
  * ,-----------------------------------------------------------------------------------.
- * |      | STab |  Up  | Tab  |      |      |   =  |   7  |   8  |   9  |   -  |      |
+ * |      |      |  Up  |      |      |      |   =  |   7  |   8  |   9  |   -  |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      | Left | Down | Right|      |      |   *  |   4  |   5  |   6  |   +  | Del  |
+ * |Delete| Left | Down | Right|      |      |   *  |   4  |   5  |   6  |   +  | Del  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |   /  |   1  |   2  |   3  |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -123,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_NUMPAD] = LAYOUT_planck_grid(
     _______, _______, KC_UP,   _______, _______, _______, KC_PEQL, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, _______,
-    _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_DEL,
+    KC_DEL,  KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_DEL,
     _______, _______, _______, _______, _______, _______, KC_PSLS, KC_P1,   KC_P2,   KC_P3,   _______, _______,
     _______, _______, _______, _______, _______, _______, _______, KC_P0,   KC_COMM, KC_PDOT, _______, _______
 ),
