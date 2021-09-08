@@ -36,7 +36,7 @@ enum custom_keycodes {
 #define GUI_TAB LGUI(KC_TAB)            // Gui-Tab
 #define CTAB_FW LCTL(KC_TAB)            // Ctrl-Tab
 #define CTAB_BK LSFT(LCTL(KC_TAB))      // Shift-Ctrl-Tab
-#define KC_TERM LGUI(KC_T)              // Super-T - Linux - Opens Terminal 
+#define KC_TERM LGUI(KC_T)              // Super-T - Linux - Opens Terminal
 #define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
 #define FILES LGUI(KC_E)                // Gui-E - Opens file browser
 
@@ -73,7 +73,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      |ExDtVl|CtlTab| Term | Enter| Bksp |  |      |      | Home | End  |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      |      |      | ---- |      |  |      |      |      |      |      |      |
+ * |  F5  |Browse|      | Files| ---- |      |  |      |      |      |      |      |      |
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_LOWER] =  LAYOUT( \
@@ -81,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______, \
   GUI_TAB, CTAB_BK, CTAB_FW, KC_PGUP, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_DEL, \
   _______, EXDTVAL, CTRLTAB, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______, \
-  _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______ \
+  KC_F5,   BROWSER, _______, FILES,   _______, _______, _______,  _______, _______, _______, _______, _______ \
 ),
 
 /* RAISE
@@ -94,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      |   %  |   ^  |   [  |   ]  |   &  |  |      |   '  |   "  |   ~  |   `  |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      |      |      |      |      |  |      | ---- | Vol- | Vol+ |      | Mute |
+ * |      |      |      |      |      |      |  |      | ---- | Vol- | Vol+ | Play | Mute |
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_RAISE] =  LAYOUT( \
@@ -102,16 +102,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, _______, _______, KC_MINS, KC_BSLS, _______, _______, \
   KC_CAPS, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_ASTR, _______, KC_PLUS, KC_EQL,  KC_UNDS, _______, KC_DEL, \
   _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_AMPR, _______, KC_QUOT, KC_DQUO, KC_TILD, KC_GRV,  _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, KC_VOLU, _______, KC_MUTE \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_VOLD, KC_VOLU, KC_MPLY, KC_MUTE \
 ),
 
 /* NUMPAD - Arrows are not in a good location. Consider reworking left side
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |      |      |      |      |      |      |  |      |      |      |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      | STab |  Up  |  Tab |      |      |  |   =  |   7  |   8  |   9  |   -  |      |
+ * |      |      |  Up  |      |      |      |  |   =  |   7  |   8  |   9  |   -  |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      | Left | Down | Right|      |      |  |   *  |   4  |   5  |   6  |   +  | Del  |
+ * |Delete| Left | Down | Right|      |      |  |   *  |   4  |   5  |   6  |   +  | Del  |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      |      |      |      |      |      |  |   /  |   1  |   2  |   3  |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
@@ -119,11 +119,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_NUMPAD] =  LAYOUT( \
-  _______, _______,   _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-  _______, S(KC_TAB), KC_UP,    KC_TAB,  _______, _______, KC_PEQL, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, _______, \
-  _______, KC_LEFT,   KC_DOWN,  KC_RGHT, _______, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_DEL, \
-  _______, _______,   _______,  _______, _______, _______, KC_PSLS, KC_P1,   KC_P2,   KC_P3,   _______, _______, \
-  _______, _______,   _______,  _______, _______, _______, _______, KC_P0,   KC_COMM, KC_PDOT, KC_PENT, _______ \
+  _______, _______, _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, KC_UP,    _______, _______, _______, KC_PEQL, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, _______, \
+  KC_DEL,  KC_LEFT, KC_DOWN,  KC_RGHT, _______, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_DEL, \
+  _______, _______, _______,  _______, _______, _______, KC_PSLS, KC_P1,   KC_P2,   KC_P3,   _______, _______, \
+  _______, _______, _______,  _______, _______, _______, _______, KC_P0,   KC_COMM, KC_PDOT, KC_PENT, _______ \
 ),
 
 /* Adjust (Lower + Raise) - Media and Functions
@@ -149,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* MOUSE
  * ,-----------------------------------------.  ,-----------------------------------------.
- * |      |      |      |      |      |      |  |      | ACL1 | ACL2 | ACL3 |      |      |
+ * |      |      |      |      |      |      |  | Mouse| ACL1 | ACL2 | ACL3 |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      |      |      |      |      |      |  |WheelU|      |  MUp |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
