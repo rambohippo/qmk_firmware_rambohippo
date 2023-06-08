@@ -1,30 +1,57 @@
-extern keymap_config_t keymap_config;
-
-/* uncomment to reset
-void matrix_init_user(void) {
-    eeconfig_init();
-};
-*/
+#include "quantum.h"
+#include "dshields.h"
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!process_record_dynamic_macro(keycode, record)) {
-        return false;
+    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX)
+            || (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)
+            || (keycode >= QK_MODS && keycode <= QK_MODS_MAX)) {
+        keycode = keycode & 0xFF;
+    }
+    if (keycode == KC_ESC && record->event.pressed) {
+        bool rc = true;
+        uint8_t mods = 0;
+        if ((mods = get_oneshot_mods()) && !has_oneshot_mods_timed_out()) {
+            clear_oneshot_mods();
+            unregister_mods(mods);
+            rc = false;
+        }
+        if ((mods = get_oneshot_locked_mods())) {
+            clear_oneshot_locked_mods();
+            unregister_mods(mods);
+            rc = false;
+        }
+        if (is_oneshot_layer_active()) {
+            layer_clear();
+            rc = false;
+        }
+        return rc;
     }
     return true;
 }
 
-// work in progress
-uint32_t layer_state_set_user(uint32_t state) {
-    switch (biton32(state)) {
-        case DEF:
-            set_all_leds_to(0,0,0);
-            break;
-        case FUN:
-            // TODO light the fn keys
-            // set_led_to(?, 0, 128, 0);
-            // set_led_to(?, 0, 128, 0);
-            break;
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case MT_A:
+        case MT_S:
+        case MT_D:
+        case MT_F:
+        case MT_J:
+        case MT_K:
+        case MT_L:
+        case MT_SCLN:
+            return 0;
+        default:
+            return QUICK_TAP_TERM;
     }
-    return state;
 }
 
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case MT_SPC:
+        case MT_BSPC:
+        case MT_ESC:
+            return true;
+        default:
+            return false;
+    }
+}
