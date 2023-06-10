@@ -33,7 +33,8 @@ enum planck_keycodes {
     RAISE,
     ADJUST,
     ALT_TAB,
-    CTRLTAB,
+    CTAB_FW,
+    CTAB_BK,
     EXDTVAL
 };
 
@@ -46,8 +47,6 @@ enum planck_keycodes {
 #define WN_DKNW LCTL(LGUI(KC_D))        // Windows - New Desktop
 #define WN_DKCL LCTL(LGUI(KC_F4))       // Windows - Close Desktop
 #define GUI_TAB LGUI(KC_TAB)            // Gui-Tab
-#define CTAB_FW LCTL(KC_TAB)            // Ctrl-Tab
-#define CTAB_BK LSFT(LCTL(KC_TAB))      // Shift-Ctrl-Tab
 #define KC_TERM LGUI(KC_T)              // Super-T - Opens Terminal
 #define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
 #define FILES LGUI(KC_E)                // Gui-E - Opens file browser
@@ -87,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT_planck_grid(
     _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
     GUI_TAB, CTAB_BK, CTAB_FW, KC_PGUP, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_DEL,
-    _______, EXDTVAL, CTRLTAB, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
+    _______, EXDTVAL, _______, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
     KC_F5,   BROWSER, _______, FILES,   _______, _______, _______, _______, _______, _______, _______, _______
 ),
 
@@ -210,20 +209,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     is_alt_tab_active = true;
                     register_code(KC_LEFT_ALT);
                 }
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
+                tap_code(KC_TAB);
             }
             break;
-        case CTRLTAB:
+        case CTAB_FW:
             if (record->event.pressed) {
                 if (!is_ctrl_tab_active) {
                     is_ctrl_tab_active = true;
-                    register_code(KC_LCTL);
+                    register_code(KC_LEFT_CTRL);
                 }
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
+                tap_code(KC_TAB);
+            }
+            break;
+        case CTAB_BK:
+            if (record->event.pressed) {
+                if (!is_ctrl_tab_active) {
+                    is_ctrl_tab_active = true;
+                    register_code(KC_LEFT_CTRL);
+                }
+                tap_code16(LSFT(KC_TAB));
             }
             break;
         case EXDTVAL:
