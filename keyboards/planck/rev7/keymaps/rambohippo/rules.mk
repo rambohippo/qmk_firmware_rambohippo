@@ -4,3 +4,4 @@ NKRO_ENABLE          = yes   # Nkey Rollover - if this doesn't work, see here: h
 TAP_DANCE_ENABLE     = no    # Enable TapDance functionality
 BOOTMAGIC_ENABLE     = no    # Enable Bootmagic Lite
 MOUSEKEY_ENABLE      = no    # Mouse keys(+4700)
+OS_DETECTION_ENABLE  = yes
