@@ -37,6 +37,8 @@ enum planck_keycodes {
 #define KC_TERM LGUI(KC_T)              // Super-T - Opens Terminal
 #define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
 #define FILES LGUI(KC_E)                // Gui-E - Opens file browser
+#define IDEA_DN LSFT(LALT(KC_DOWN))     // Intellij Idea - Move Line Down
+#define IDEA_UP LSFT(LALT(KC_UP))       // Intellij Idea - Move Line Up
 
 void ctrl_tab_register(bool *is_ctrl_registered) {
     if (*is_ctrl_registered) return;
