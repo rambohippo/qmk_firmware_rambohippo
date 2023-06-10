@@ -48,3 +48,9 @@
 // Most tactile encoders have detents every 4 stages
 #define ENCODER_RESOLUTION 4
 #define TAP_CODE_DELAY 115
+
+// 0 indexed layers for the tri-layer feature
+// Defaults are lower=1, upper=2, adjust=3
+#define TRI_LAYER_LOWER_LAYER 1
+#define TRI_LAYER_UPPER_LAYER 2
+#define TRI_LAYER_ADJUST_LAYER 4
