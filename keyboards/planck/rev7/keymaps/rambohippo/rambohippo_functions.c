@@ -22,8 +22,8 @@ enum planck_keycodes {
 };
 
 #define NUMPAD MO(_NUMPAD)
-#define LN_DKFW LCTL(LALT(KC_RGHT))     // Linux - Next Desktop
-#define LN_DKBK LCTL(LALT(KC_LEFT))     // Linux - Previous Desktop
+#define LN_DKFW LGUI(LCTL(KC_DOWN))     // Pop OS - Next Workspace
+#define LN_DKBK LGUI(LCTL(KC_UP))       // Pop OS - Previous Workspace
 #define WN_DKFW LCTL(LGUI(KC_RGHT))     // Windows - Next Desktop
 #define WN_DKBK LCTL(LGUI(KC_LEFT))     // Windows - Previous Desktop
 #define WN_DKNW LCTL(LGUI(KC_D))        // Windows - New Desktop
