@@ -29,9 +29,6 @@ enum planck_layers {
 
 enum planck_keycodes {
     QWERTY = SAFE_RANGE,
-    LOWER,
-    RAISE,
-    ADJUST,
     ALT_TAB,
     CTAB_FW,
     CTAB_BK,
@@ -39,7 +36,6 @@ enum planck_keycodes {
 };
 
 #define NUMPAD MO(_NUMPAD)
-#define ADJUST MO(_ADJUST)
 #define LN_DKFW LCTL(LALT(KC_RGHT))     // Linux - Next Desktop
 #define LN_DKBK LCTL(LALT(KC_LEFT))     // Linux - Previous Desktop
 #define WN_DKFW LCTL(LGUI(KC_RGHT))     // Windows - Next Desktop
@@ -50,6 +46,34 @@ enum planck_keycodes {
 #define KC_TERM LGUI(KC_T)              // Super-T - Opens Terminal
 #define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
 #define FILES LGUI(KC_E)                // Gui-E - Opens file browser
+
+void ctrl_tab_register(bool *is_ctrl_registered) {
+    if (*is_ctrl_registered) return;
+
+    register_code(KC_LEFT_CTRL);
+    *is_ctrl_registered = true;
+}
+
+void ctrl_tab_unregister(bool *is_ctrl_registered) {
+    if (!*is_ctrl_registered) return;
+
+    unregister_code(KC_LEFT_CTRL);
+    *is_ctrl_registered = false;
+}
+
+void alt_tab_register(bool *is_alt_registered) {
+    if (*is_alt_registered) return;
+
+    register_code(KC_LEFT_ALT);
+    *is_alt_registered = true;
+}
+
+void alt_tab_unregister(bool *is_alt_registered) {
+    if (!*is_alt_registered) return;
+
+    unregister_code(KC_LEFT_ALT);
+    *is_alt_registered = false;
+}
 
 /* clang-format off */
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -62,14 +86,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  | Shift|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | Gui  | Ctrl | Alt  |Numpad|Lower | Space| Enter| Raise| Ctrl | Left | Right| Esc  |
+ * | Gui  | Ctrl | Alt  |Numpad| Lower| Space| Enter| Raise| Ctrl | Left | Right| Esc  |
  * `-----------------------------------------------------------------------------------'
  */
 [_QWERTY] = LAYOUT_planck_grid(
     KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
     KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
-    KC_LGUI, KC_LCTL, KC_LALT, NUMPAD,  LOWER,   KC_SPC,  KC_ENT,  RAISE,   KC_RCTL, KC_LEFT, KC_RGHT, KC_ESC
+    KC_LGUI, KC_LCTL, KC_LALT, NUMPAD,  TL_LOWR, KC_SPC,  KC_ENT,  TL_UPPR, KC_RCTL, KC_LEFT, KC_RGHT, KC_ESC
 ),
 
 /* Lower
@@ -110,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* NUMPAD
  * ,-----------------------------------------------------------------------------------.
- * |      |      |  Up  |      |      |      |   =  |   7  |   8  |   9  |   -  |      |
+ * |      |      |  Up  |      |      |      |   =  |   7  |   8  |   9  |   -  |numlock|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |Delete| Left | Down | Right|      |      |   *  |   4  |   5  |   6  |   +  | Del  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -120,7 +144,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_NUMPAD] = LAYOUT_planck_grid(
-    _______, _______, KC_UP,   _______, _______, _______, KC_PEQL, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, _______,
+    _______, _______, KC_UP,   _______, _______, _______, KC_PEQL, KC_P7,   KC_P8,   KC_P9,   KC_PMNS, KC_NUM,
     KC_DEL,  KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, KC_PAST, KC_P4,   KC_P5,   KC_P6,   KC_PPLS, KC_DEL,
     _______, _______, _______, _______, _______, _______, KC_PSLS, KC_P1,   KC_P2,   KC_P3,   _______, _______,
     _______, _______, _______, _______, _______, _______, _______, KC_P0,   KC_COMM, KC_PDOT, _______, _______
@@ -134,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |LinPre|LinNxt|WinPre|WinNxt|WinDCL|      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      | Reset|
+ * |      |      |      |      | ---- |      |      | ---- |      |      |      | Reset|
  * `-----------------------------------------------------------------------------------'
  */
 [_ADJUST] = LAYOUT_planck_grid(
@@ -175,58 +199,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-        case LOWER:
-            if (record->event.pressed) {
-                layer_on(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                if (is_alt_tab_active) {
-                    unregister_code(KC_LEFT_ALT);
-                    is_alt_tab_active = false;
-                }
-                if (is_ctrl_tab_active) {
-                    unregister_code(KC_LEFT_CTRL);
-                    is_ctrl_tab_active = false;
-                }
+        case TL_LOWR:
+            // On key release, release keys for alt-tab + ctrl-tab
+            if (!record->event.pressed) {
+                alt_tab_unregister(&is_alt_tab_active);
+                ctrl_tab_unregister(&is_ctrl_tab_active);
             }
-            return false;
-            break;
-        case RAISE:
-            if (record->event.pressed) {
-                layer_on(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            }
-            return false;
+            return true;
             break;
         case ALT_TAB:
             if (record->event.pressed) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LEFT_ALT);
-                }
+                alt_tab_register(&is_alt_tab_active);
+                ctrl_tab_unregister(&is_ctrl_tab_active);
                 tap_code(KC_TAB);
             }
             break;
         case CTAB_FW:
             if (record->event.pressed) {
-                if (!is_ctrl_tab_active) {
-                    is_ctrl_tab_active = true;
-                    register_code(KC_LEFT_CTRL);
-                }
+                ctrl_tab_register(&is_ctrl_tab_active);
+                alt_tab_unregister(&is_alt_tab_active);
                 tap_code(KC_TAB);
             }
             break;
         case CTAB_BK:
             if (record->event.pressed) {
-                if (!is_ctrl_tab_active) {
-                    is_ctrl_tab_active = true;
-                    register_code(KC_LEFT_CTRL);
-                }
+                ctrl_tab_register(&is_ctrl_tab_active);
+                alt_tab_unregister(&is_alt_tab_active);
                 tap_code16(LSFT(KC_TAB));
             }
             break;
