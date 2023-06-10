@@ -1,6 +1,7 @@
 #ifndef RAMBOHIPPO_FUNCTIONS
 #define RAMBOHIPPO_FUNCTIONS
-#include "default_keyboard.h"
+#include "quantum.h"
+#include "os_detection.h"
 
 bool is_alt_tab_active = false;
 bool is_ctrl_tab_active = false;
@@ -18,7 +19,11 @@ enum planck_keycodes {
     ALT_TAB,
     CTAB_FW,
     CTAB_BK,
-    EXDTVAL
+    EXDTVAL,
+    WORK_FW,
+    WORK_BK,
+    WORK_NW,
+    WORK_CL
 };
 
 #define NUMPAD MO(_NUMPAD)
@@ -61,6 +66,54 @@ void alt_tab_unregister(bool *is_alt_registered) {
     *is_alt_registered = false;
 }
 
+void next_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKFW);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKFW);
+            break;
+    }
+}
+
+void previous_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKBK);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKBK);
+            break;
+    }
+}
+
+void create_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKFW);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKNW);
+            break;
+    }
+}
+
+void remove_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKBK);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKCL);
+            break;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QWERTY:
@@ -69,7 +122,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_QWERTY);
             }
             return false;
-            break;
         case TL_LOWR:
             // On key release, release keys for alt-tab + ctrl-tab
             if (!record->event.pressed) {
@@ -77,28 +129,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 ctrl_tab_unregister(&is_ctrl_tab_active);
             }
             return true;
-            break;
         case ALT_TAB:
             if (record->event.pressed) {
                 alt_tab_register(&is_alt_tab_active);
                 ctrl_tab_unregister(&is_ctrl_tab_active);
                 tap_code(KC_TAB);
             }
-            break;
+            return false;
         case CTAB_FW:
             if (record->event.pressed) {
                 ctrl_tab_register(&is_ctrl_tab_active);
                 alt_tab_unregister(&is_alt_tab_active);
                 tap_code(KC_TAB);
             }
-            break;
+            return false;
         case CTAB_BK:
             if (record->event.pressed) {
                 ctrl_tab_register(&is_ctrl_tab_active);
                 alt_tab_unregister(&is_alt_tab_active);
                 tap_code16(LSFT(KC_TAB));
             }
-            break;
+            return false;
         case EXDTVAL:
             if (record->event.pressed) {
                 tap_code(KC_LEFT_ALT);
@@ -106,7 +157,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_V);
                 tap_code(KC_V);
             }
-            break;
+            return false;
+        case WORK_FW:
+            if (record->event.pressed) {
+                next_workspace();
+            }
+            return false;
+        case WORK_BK:
+            if (record->event.pressed) {
+                previous_workspace();
+            }
+            return false;
+        case WORK_NW:
+            if (record->event.pressed) {
+                create_workspace();
+            }
+            return false;
+        case WORK_CL:
+            if (record->event.pressed) {
+                remove_workspace();
+            }
+            return false;
     }
     return true;
 }
