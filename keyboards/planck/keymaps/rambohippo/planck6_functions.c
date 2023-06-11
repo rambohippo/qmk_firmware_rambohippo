@@ -2,6 +2,7 @@
 #define PLANCK6_FUNCTIONS
 #include "quantum.h"
 #include "muse.h"
+#include "os_detection.h"
 
 bool is_alt_tab_active = false;
 bool is_ctrl_tab_active = false;
@@ -16,33 +17,122 @@ enum planck_layers {
 
 enum planck_keycodes {
     QWERTY = SAFE_RANGE,
-    LOWER,
-    RAISE,
-    ADJUST,
     ALT_TAB,
-    CTRLTAB,
-    EXDTVAL
+    CTAB_FW,
+    CTAB_BK,
+    EXDTVAL,
+    WORK_FW,
+    WORK_BK,
+    WORK_NW,
+    WORK_CL,
+    WORK_SH
 };
 
 #define NUMPAD MO(_NUMPAD)
-#define ADJUST MO(_ADJUST)
-#define LN_DKFW LCTL(LALT(KC_RGHT))     // Linux - Next Desktop
-#define LN_DKBK LCTL(LALT(KC_LEFT))     // Linux - Previous Desktop
+#define LN_DKFW LGUI(LCTL(KC_DOWN))     // Pop OS - Next Workspace
+#define LN_DKBK LGUI(LCTL(KC_UP))       // Pop OS - Previous Workspace
+#define LN_WNFW LGUI(LSFT(KC_DOWN))     // Pop OS - Move window to next workspace
+#define LN_WNBK LGUI(LSFT(KC_UP))       // Pop OS - Move window to previous workspace
 #define WN_DKFW LCTL(LGUI(KC_RGHT))     // Windows - Next Desktop
 #define WN_DKBK LCTL(LGUI(KC_LEFT))     // Windows - Previous Desktop
 #define WN_DKNW LCTL(LGUI(KC_D))        // Windows - New Desktop
 #define WN_DKCL LCTL(LGUI(KC_F4))       // Windows - Close Desktop
 #define GUI_TAB LGUI(KC_TAB)            // Gui-Tab
-#define CTAB_FW LCTL(KC_TAB)            // Ctrl-Tab
-#define CTAB_BK LSFT(LCTL(KC_TAB))      // Shift-Ctrl-Tab
+#define LN_WORK LGUI(KC_D)              // Pop OS - Show workspaces
+#define WN_WORK LGUI(KC_TAB)            // Windows - Show workspaces
 #define KC_TERM LGUI(KC_T)              // Super-T - Opens Terminal
 #define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
 #define FILES LGUI(KC_E)                // Gui-E - Opens file browser
+#define IDEA_DN LSFT(LALT(KC_DOWN))     // Intellij Idea - Move Line Down
+#define IDEA_UP LSFT(LALT(KC_UP))       // Intellij Idea - Move Line Up
 
-#ifdef AUDIO_ENABLE
-float plover_song[][2]    = SONG(PLOVER_SOUND);
-float plover_gb_song[][2] = SONG(PLOVER_GOODBYE_SOUND);
-#endif
+void ctrl_tab_register(bool *is_ctrl_registered) {
+    if (*is_ctrl_registered) return;
+
+    register_code(KC_LEFT_CTRL);
+    *is_ctrl_registered = true;
+}
+
+void ctrl_tab_unregister(bool *is_ctrl_registered) {
+    if (!*is_ctrl_registered) return;
+
+    unregister_code(KC_LEFT_CTRL);
+    *is_ctrl_registered = false;
+}
+
+void alt_tab_register(bool *is_alt_registered) {
+    if (*is_alt_registered) return;
+
+    register_code(KC_LEFT_ALT);
+    *is_alt_registered = true;
+}
+
+void alt_tab_unregister(bool *is_alt_registered) {
+    if (!*is_alt_registered) return;
+
+    unregister_code(KC_LEFT_ALT);
+    *is_alt_registered = false;
+}
+
+void next_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKFW);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKFW);
+            break;
+    }
+}
+
+void previous_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKBK);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKBK);
+            break;
+    }
+}
+
+void create_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKFW);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKNW);
+            break;
+    }
+}
+
+void remove_workspace(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_DKBK);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_DKCL);
+            break;
+    }
+}
+
+void show_workspaces(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_WORK);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_WORK);
+            break;
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -52,65 +142,67 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_QWERTY);
             }
             return false;
-            break;
-        case LOWER:
-            if (record->event.pressed) {
-                layer_on(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_LOWER);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-                if (is_alt_tab_active) {
-                    unregister_code(KC_LALT);
-                    is_alt_tab_active = false;
-                }
-                if (is_ctrl_tab_active) {
-                    unregister_code(KC_LCTL);
-                    is_ctrl_tab_active = false;
-                }
+        case TL_LOWR:
+            // On key release, release keys for alt-tab + ctrl-tab
+            if (!record->event.pressed) {
+                alt_tab_unregister(&is_alt_tab_active);
+                ctrl_tab_unregister(&is_ctrl_tab_active);
             }
-            return false;
-            break;
-        case RAISE:
-            if (record->event.pressed) {
-                layer_on(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            } else {
-                layer_off(_RAISE);
-                update_tri_layer(_LOWER, _RAISE, _ADJUST);
-            }
-            return false;
-            break;
+            return true;
         case ALT_TAB:
             if (record->event.pressed) {
-                if (!is_alt_tab_active) {
-                    is_alt_tab_active = true;
-                    register_code(KC_LALT);
-                }
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
+                alt_tab_register(&is_alt_tab_active);
+                ctrl_tab_unregister(&is_ctrl_tab_active);
+                tap_code(KC_TAB);
             }
-            break;
-        case CTRLTAB:
+            return false;
+        case CTAB_FW:
             if (record->event.pressed) {
-                if (!is_ctrl_tab_active) {
-                    is_ctrl_tab_active = true;
-                    register_code(KC_LCTL);
-                }
-                register_code(KC_TAB);
-            } else {
-                unregister_code(KC_TAB);
+                ctrl_tab_register(&is_ctrl_tab_active);
+                alt_tab_unregister(&is_alt_tab_active);
+                tap_code(KC_TAB);
             }
-            break;
+            return false;
+        case CTAB_BK:
+            if (record->event.pressed) {
+                ctrl_tab_register(&is_ctrl_tab_active);
+                alt_tab_unregister(&is_alt_tab_active);
+                tap_code16(LSFT(KC_TAB));
+            }
+            return false;
         case EXDTVAL:
             if (record->event.pressed) {
-                tap_code(KC_LALT);
+                tap_code(KC_LEFT_ALT);
                 tap_code(KC_A);
                 tap_code(KC_V);
                 tap_code(KC_V);
             }
-            break;
+            return false;
+        case WORK_FW:
+            if (record->event.pressed) {
+                next_workspace();
+            }
+            return false;
+        case WORK_BK:
+            if (record->event.pressed) {
+                previous_workspace();
+            }
+            return false;
+        case WORK_NW:
+            if (record->event.pressed) {
+                create_workspace();
+            }
+            return false;
+        case WORK_CL:
+            if (record->event.pressed) {
+                remove_workspace();
+            }
+            return false;
+        case WORK_SH:
+            if (record->event.pressed) {
+                show_workspaces();
+            }
+            return false;
     }
     return true;
 }
@@ -173,16 +265,5 @@ void matrix_scan_user(void) {
     }
 #endif
 }
-
-bool music_mask_user(uint16_t keycode) {
-    switch (keycode) {
-        case RAISE:
-        case LOWER:
-            return false;
-        default:
-            return true;
-    }
-}
-
 
 #endif
