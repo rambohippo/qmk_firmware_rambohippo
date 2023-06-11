@@ -23,17 +23,22 @@ enum planck_keycodes {
     WORK_FW,
     WORK_BK,
     WORK_NW,
-    WORK_CL
+    WORK_CL,
+    WORK_SH
 };
 
 #define NUMPAD MO(_NUMPAD)
 #define LN_DKFW LGUI(LCTL(KC_DOWN))     // Pop OS - Next Workspace
 #define LN_DKBK LGUI(LCTL(KC_UP))       // Pop OS - Previous Workspace
+#define LN_WNFW LGUI(LSFT(KC_DOWN))     // Pop OS - Move window to next workspace
+#define LN_WNBK LGUI(LSFT(KC_UP))       // Pop OS - Move window to previous workspace
 #define WN_DKFW LCTL(LGUI(KC_RGHT))     // Windows - Next Desktop
 #define WN_DKBK LCTL(LGUI(KC_LEFT))     // Windows - Previous Desktop
 #define WN_DKNW LCTL(LGUI(KC_D))        // Windows - New Desktop
 #define WN_DKCL LCTL(LGUI(KC_F4))       // Windows - Close Desktop
 #define GUI_TAB LGUI(KC_TAB)            // Gui-Tab
+#define LN_WORK LGUI(KC_D)              // Pop OS - Show workspaces
+#define WN_WORK LGUI(KC_TAB)            // Windows - Show workspaces
 #define KC_TERM LGUI(KC_T)              // Super-T - Opens Terminal
 #define BROWSER LGUI(KC_3)              // Gui-3 - Windows - Opens browser
 #define FILES LGUI(KC_E)                // Gui-E - Opens file browser
@@ -116,6 +121,18 @@ void remove_workspace(void) {
     }
 }
 
+void show_workspaces(void) {
+    switch (detected_host_os()) {
+        case OS_LINUX:
+            tap_code16(LN_WORK);
+            break;
+        case OS_WINDOWS:
+        default:
+            tap_code16(WN_WORK);
+            break;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QWERTY:
@@ -178,6 +195,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case WORK_CL:
             if (record->event.pressed) {
                 remove_workspace();
+            }
+            return false;
+        case WORK_SH:
+            if (record->event.pressed) {
+                show_workspaces();
             }
             return false;
     }
