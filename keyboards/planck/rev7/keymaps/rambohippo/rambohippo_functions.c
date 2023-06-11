@@ -11,6 +11,7 @@ enum planck_layers {
     _LOWER,
     _RAISE,
     _NUMPAD,
+    _MEDIA,
     _ADJUST
 };
 
@@ -28,6 +29,7 @@ enum planck_keycodes {
 };
 
 #define NUMPAD MO(_NUMPAD)
+#define MEDIA MO(_MEDIA)
 #define LN_DKFW LGUI(LCTL(KC_DOWN))     // Pop OS - Next Workspace
 #define LN_DKBK LGUI(LCTL(KC_UP))       // Pop OS - Previous Workspace
 #define LN_WNFW LGUI(LSFT(KC_DOWN))     // Pop OS - Move window to next workspace
