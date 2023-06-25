@@ -41,9 +41,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Lower
  * ,-----------------------------------------------------------------------------------.
- * |      |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
+ * |WorkSh|   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |WorkSh|SC Tab| C Tab|PageUp|PageDn|AltTab| Left | Down |  Up  | Right|      | Del  |
+ * |      |SC Tab| C Tab|PageUp|PageDn|AltTab| Left | Down |  Up  | Right|      | Del  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |ExDtVl|CtlTab| Term | Enter| Bksp |      | Home | End  |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -51,8 +51,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_planck_grid(
-    _______, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
-    WORK_SH, CTAB_BK, CTAB_FW, KC_PGUP, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_DEL,
+    WORK_SH, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
+    _______, CTAB_BK, CTAB_FW, KC_PGUP, KC_PGDN, ALT_TAB, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, KC_DEL,
     _______, EXDTVAL, _______, KC_TERM, KC_ENT,  KC_BSPC, _______, _______, KC_HOME, KC_END,  _______, _______,
     KC_F5,   BROWSER, _______, FILES,   XXXXXXX, _______, _______, _______, _______, _______, _______, _______
 ),
@@ -115,9 +115,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |PrtScn|  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |SC Tab| C Tab|WinDNW|      |IDEADN|IDEAUP|      |      | F12  |
+ * |      |      |      |SC Tab| C Tab|WorkNW|      |IDEADN|IDEAUP|      |      | F12  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |LnWnBk|LnWnFw|WinPre|WinNxt|WinDCL|      |      |      |      |      |      |
+ * |      |LnWnBk|LnWnFw|WorkBk|WorkNx|WorkCl|      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      | ---- |      |      | ---- |      |      |      | Reset|
  * `-----------------------------------------------------------------------------------'
